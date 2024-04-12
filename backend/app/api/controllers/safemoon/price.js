@@ -26,6 +26,9 @@ module.exports = {
   getPrices: function(req, res, next) {
     const startTime = new Date();
     startTime.setDate(startTime.getDate() - 7 + 1)
+    startTime.setHours(0);
+    startTime.setMinutes(0);
+    const current = new Date();
     priceModel.find({ 
       $and: [ { Timestamp: { $gte : startTime } }, { Timestamp: { $lte : current } }] 
     })
