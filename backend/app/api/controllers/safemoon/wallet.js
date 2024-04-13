@@ -16,6 +16,12 @@ module.exports = {
     console.log(req.body)
     // check unique walletId
     const wallets = await walletModel.find().exec()
+    for (let item of wallets) {
+      if (item.walletId === wallet.walletId) {
+        res.status(200).json({msg: "Aleady exist", data: item._id});
+        return
+      }
+    }
     // check invalid walletId
     axios.get('https://api.bscscan.com/api?'+ new URLSearchParams({
         module: 'account',
@@ -34,12 +40,7 @@ module.exports = {
         const {message} = data.data
         if (message !== 'NOTOK') {
           walletModel.create(wallet, function (err, result) {
-            if (err) {
-              res.status(400).json({ msg: "Creat failed", data: null});
-            }
-            else {
-              res.status(200).json({msg: "Created successfully!", data: result._id});
-            }
+            
           });
         } else {
           res.status(400).json({ msg: "Invalid WalletId", data: null});
