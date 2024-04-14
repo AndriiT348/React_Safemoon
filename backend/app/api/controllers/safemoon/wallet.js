@@ -40,7 +40,12 @@ module.exports = {
         const {message} = data.data
         if (message !== 'NOTOK') {
           walletModel.create(wallet, function (err, result) {
-            
+            if (err) {
+              res.status(400).json({ msg: "Creat failed", data: null});
+            }
+            else {
+              res.status(200).json({msg: "Created successfully!", data: result._id});
+            }
           });
         } else {
           res.status(400).json({ msg: "Invalid WalletId", data: null});
